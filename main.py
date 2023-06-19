@@ -9,6 +9,10 @@ class payment_entity:
         self.ov = ov
         self.installments = installments
 
+    @staticmethod
+    def get_gc_yillik():
+        return 3.04150
+
 class installment_entity:
     def __init(self,no,tarih,gercek_gun,taksit,ap,kar,kalan_ap,guncel_deger_oran):
         self.no = no
@@ -23,16 +27,25 @@ class installment_entity:
         # self.guncel_deger_oran_x = guncel_deger_x
 
 class vendor_payment_main_entity:
-    def __init__(self):
-        self.statici_odemeleri
-        self.odeme_tutari_toplam
-        self.simdiki_deger_toplam
+    def __init__(self,statici_odemeleri):
+        self.statici_odemeleri = statici_odemeleri
+        self.odeme_tutari_toplam = sum(vendor_payment.odeme_tutari for vendor_payment in self.statici_odemeleri)
+        self.simdiki_deger_toplam = sum(vendor_payment.simdiki_deger for vendor_payment in self.statici_odemeleri)
     
     @staticmethod
-    def calculate_days_between(self,date1,date2):
+    def calculate_days_between(date1,date2):
         delta = date1 - date2
         return delta.days
+    @staticmethod
+    def calculate_present_value(days_between,future_value,gc_yillik):
+        present_value = future_value/((1 + gc_yillik/100) ** (days_between/360))
+        return present_value
     
+    def get_odeme_tutari_toplam(self):
+        return self.odeme_tutari_toplam
+    
+    def get_simdiki_deger_toplam(self):
+        return self.simdiki_deger_toplam
 class vendor_payment_entity:
     def __init__(self,odeme_tarihi,odeme_tutari,gun_fark,simdiki_deger):
         self.odeme_tarihi = odeme_tarihi
@@ -42,15 +55,31 @@ class vendor_payment_entity:
     
 
 def main():
+
+    
     fkt = date(2016,12,12)
-    vp1_odeme_tarihi = date(2016,12,15)
-    vp1_odeme_tutari = 171400.00
-    vp1_gun_fark = vendor_payment_entity.calculate_days_between(vp1_odeme_tarihi,fkt)
-    vp1
+    gc_yillik = payment_entity.get_gc_yillik()
+     
 
-    vp1 = vendor_payment_entity(vp1_odeme_tarihi,vp1_odeme_tutari,vp1_gun_fark,)
+    vendor_payments = []
+    number_mappings = {
+        1:(date(2016,12,15),171400.00),
+        2:(date(2017,3,1),85700.00),
+        3:(date(2017,3,27),85700.00),
+        4:(date(2017,4,10),42850.00),
+        5:(date(2017,4,24),42850.00),        
+    }
 
-    payment = payment_entity()
+    for number in range(1,6):
+        vp_odeme_tarihi, vp_odeme_tutari = number_mappings.get(number)       
+        vp_gun_fark = vendor_payment_main_entity.calculate_days_between(vp_odeme_tarihi,fkt)
+        vp_simdiki_deger = vendor_payment_main_entity.calculate_present_value(vp_gun_fark,vp_odeme_tutari,gc_yillik)
+        vp = vendor_payment_entity(vp_odeme_tarihi,vp_odeme_tutari,vp_gun_fark,vp_simdiki_deger)
+        vendor_payments.append(vp)
+    vendor_payment_main = vendor_payment_main_entity(vendor_payments)
+    print(vendor_payment_main.get_odeme_tutari_toplam())
+    print(vendor_payment_main.get_simdiki_deger_toplam())
+
 
 if __name__ == '__main__':
     main()
