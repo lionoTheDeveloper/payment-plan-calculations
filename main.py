@@ -44,21 +44,16 @@ class payment_entity:
         self.ov = ov
         self.installments = installments
 
+    @staticmethod
+    def add_month(original_date,months_to_add):
+        return original_date + relativedelta(months=months_to_add)
     
+    @staticmethod
+    def calculate_days_between(date1,date2):
+        delta = date1 - date2
+        return delta.days
 
-class installment_entity:
-    def __init(self,no,tarih,gercek_gun,taksit,ap,kar,kalan_ap,guncel_deger_oran,guncellenen_taksit):
-        self.no = no
-        self.tarih = tarih
-        self.gercek_gun = gercek_gun
-        self.gun = 30
-        self.taksit = taksit
-        self.ap = ap
-        self.kar = kar
-        self.kalan_ap = kalan_ap
-        self.guncel_deger_oran = guncel_deger_oran
-        self.guncellenen_taksit = guncellenen_taksit
-        # self.guncel_deger_oran_x = guncel_deger_x
+
 
 def main():
 
@@ -94,18 +89,46 @@ def main():
         3:(4972.00),
         4:(4972.00),
         37:(7458.00),
+        38:(7458.00),
+        39:(7458.00),
+        40:(2486.00),    
+    }
+    number_guncellenen_taksit = {
+        1:(4972.00),
+        2:(4972.00),
+        3:(4972.00),
+        4:(4972.00),
         37:(7458.00),
-        37:(7458.00),
-        37:(2486.00),    
+        38:(7458.00),
+        39:(7458.00),
+        40:(2486.00),    
     }
 
-   
+    installments = []
+
     for number in range(1,41):
         
-        tarih = fkt if number == 1 else 
+        tarih = fkt if number == 1 else payment_entity.add_month(fkt,number)
+        gercek_gun = payment_entity.calculate_days_between(tarih, tarih if number == 1 else installments[number - 1].tarih)
+        taksit = number_guncellenen_taksit.get(number,(0))
+        if taksit == 0:
+            taksit 
+        installment = installment_entity(number,tarih,gercek_gun)
+        installments.append(installment)
+
+class installment_entity:
+    def __init(self,no,tarih,gercek_gun,taksit,ap,kar,kalan_ap,guncel_deger_oran,guncellenen_taksit):
+        self.no = no
+        self.tarih = tarih
+        self.gercek_gun = gercek_gun
+        self.gun = 30
+        self.taksit = taksit
+        self.ap = ap
+        self.kar = kar
+        self.kalan_ap = kalan_ap
+        self.guncel_deger_oran = guncel_deger_oran
+        self.guncellenen_taksit = guncellenen_taksit
+        # self.guncel_deger_oran_x = guncel_deger_x
         
-        taksit = installment_entity(number,) 
-
-
 if __name__ == '__main__':
     main()
