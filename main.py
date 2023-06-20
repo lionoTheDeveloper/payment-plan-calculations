@@ -1,28 +1,5 @@
 from datetime import date
-
-class payment_entity:
-    def __init__(self,fkt,ov,installments):
-        self.gc_yillik = 3.04150
-        self.fkt = fkt
-        self.r_yillik = 3.01552
-        self.r_aylik = self.r_yillik / 12
-        self.ov = ov
-        self.installments = installments
-
-    
-
-class installment_entity:
-    def __init(self,no,tarih,gercek_gun,taksit,ap,kar,kalan_ap,guncel_deger_oran):
-        self.no = no
-        self.tarih = tarih
-        self.gercek_gun = gercek_gun
-        self.gun = 30
-        self.taksit = taksit
-        self.ap = ap
-        self.kar = kar
-        self.kalan_ap = kalan_ap
-        self.guncel_deger_oran = guncel_deger_oran
-        # self.guncel_deger_oran_x = guncel_deger_x
+from dateutil.relativedelta import relativedelta 
 
 class vendor_payment_main_entity:
     def __init__(self,statici_odemeleri):
@@ -57,6 +34,32 @@ class vendor_payment_entity:
         self.simdiki_deger = simdiki_deger
     
 
+
+class payment_entity:
+    def __init__(self,fkt,ov,installments):
+        self.gc_yillik = 3.04150
+        self.fkt = fkt
+        self.r_yillik = 3.01552
+        self.r_aylik = self.r_yillik / 12
+        self.ov = ov
+        self.installments = installments
+
+    
+
+class installment_entity:
+    def __init(self,no,tarih,gercek_gun,taksit,ap,kar,kalan_ap,guncel_deger_oran,guncellenen_taksit):
+        self.no = no
+        self.tarih = tarih
+        self.gercek_gun = gercek_gun
+        self.gun = 30
+        self.taksit = taksit
+        self.ap = ap
+        self.kar = kar
+        self.kalan_ap = kalan_ap
+        self.guncel_deger_oran = guncel_deger_oran
+        self.guncellenen_taksit = guncellenen_taksit
+        # self.guncel_deger_oran_x = guncel_deger_x
+
 def main():
 
     
@@ -80,10 +83,28 @@ def main():
         vp = vendor_payment_entity(vp_odeme_tarihi,vp_odeme_tutari,vp_gun_fark,vp_simdiki_deger)
         vendor_payments.append(vp)
     vendor_payment_main = vendor_payment_main_entity(vendor_payments)
-
     
     print(vendor_payment_main.get_odeme_tutari_toplam())
     print(vendor_payment_main.get_simdiki_deger_toplam())
+
+    
+    number_guncellenen_taksit = {
+        1:(4972.00),
+        2:(4972.00),
+        3:(4972.00),
+        4:(4972.00),
+        37:(7458.00),
+        37:(7458.00),
+        37:(7458.00),
+        37:(2486.00),    
+    }
+
+   
+    for number in range(1,41):
+        
+        tarih = fkt if number == 1 else 
+        
+        taksit = installment_entity(number,) 
 
 
 if __name__ == '__main__':
