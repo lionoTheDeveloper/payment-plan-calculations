@@ -9,9 +9,7 @@ class payment_entity:
         self.ov = ov
         self.installments = installments
 
-    @staticmethod
-    def get_gc_yillik():
-        return 3.04150
+    
 
 class installment_entity:
     def __init(self,no,tarih,gercek_gun,taksit,ap,kar,kalan_ap,guncel_deger_oran):
@@ -41,11 +39,16 @@ class vendor_payment_main_entity:
         present_value = future_value/((1 + gc_yillik/100) ** (days_between/360))
         return present_value
     
+    @staticmethod
+    def get_gc_yillik():
+        return 3.04150
+    
     def get_odeme_tutari_toplam(self):
         return self.odeme_tutari_toplam
     
     def get_simdiki_deger_toplam(self):
-        return self.simdiki_deger_toplam
+        return round(self.simdiki_deger_toplam,2)
+    
 class vendor_payment_entity:
     def __init__(self,odeme_tarihi,odeme_tutari,gun_fark,simdiki_deger):
         self.odeme_tarihi = odeme_tarihi
@@ -58,7 +61,7 @@ def main():
 
     
     fkt = date(2016,12,12)
-    gc_yillik = payment_entity.get_gc_yillik()
+    gc_yillik = vendor_payment_main_entity.get_gc_yillik()
      
 
     vendor_payments = []
@@ -77,6 +80,8 @@ def main():
         vp = vendor_payment_entity(vp_odeme_tarihi,vp_odeme_tutari,vp_gun_fark,vp_simdiki_deger)
         vendor_payments.append(vp)
     vendor_payment_main = vendor_payment_main_entity(vendor_payments)
+
+    
     print(vendor_payment_main.get_odeme_tutari_toplam())
     print(vendor_payment_main.get_simdiki_deger_toplam())
 
