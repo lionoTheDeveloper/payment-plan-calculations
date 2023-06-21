@@ -1,6 +1,5 @@
 from datetime import date
-from dateutil.relativedelta import relativedelta 
-
+from dateutil.relativedelta import relativedelta
 class vendor_payment_main_entity:
     def __init__(self,statici_odemeleri):
         self.statici_odemeleri = statici_odemeleri
@@ -35,30 +34,7 @@ class vendor_payment_entity:
     
 
 
-class payment_entity:
-    def __init__(self,fkt,ov,installments):
-        self.gc_yillik = 3.04150
-        self.fkt = fkt
-        self.r_yillik = 3.01552
-        self.r_aylik = self.r_yillik / 12
-        self.ov = ov
-        self.installments = installments
 
-    
-
-class installment_entity:
-    def __init(self,no,tarih,gercek_gun,taksit,ap,kar,kalan_ap,guncel_deger_oran,guncellenen_taksit):
-        self.no = no
-        self.tarih = tarih
-        self.gercek_gun = gercek_gun
-        self.gun = 30
-        self.taksit = taksit
-        self.ap = ap
-        self.kar = kar
-        self.kalan_ap = kalan_ap
-        self.guncel_deger_oran = guncel_deger_oran
-        self.guncellenen_taksit = guncellenen_taksit
-        # self.guncel_deger_oran_x = guncel_deger_x
 
 def main():
 
@@ -92,20 +68,53 @@ def main():
         1:(4972.00),
         2:(4972.00),
         3:(4972.00),
-        4:(4972.00),
+        4:(9944.00),
         37:(7458.00),
-        37:(7458.00),
-        37:(7458.00),
-        37:(2486.00),    
+        38:(7458.00),
+        39:(7458.00),
+        40:(2486.00),    
     }
 
-   
+    installments = []
     for number in range(1,41):
         
-        tarih = fkt if number == 1 else 
-        
-        taksit = installment_entity(number,) 
+        tarih = fkt if number == 1 else payment_entity.add_month(fkt,(number -1))
+        gercek_gun =  payment_entity.calculate_days_between(tarih, tarih if number == 1 else installments[(number - 2)].tarih)
+        taksit = number_guncellenen_taksit.get(number,(0.00))
+        installment = installment_entity(number,tarih,gercek_gun,taksit,0,0,0,taksit) 
+        installments.append(installment)
 
+class payment_entity:
+    def __init__(self,fkt,ov,installments):
+        self.gc_yillik = 3.04150
+        self.fkt = fkt
+        self.r_yillik = 3.01552
+        self.r_aylik = self.r_yillik / 12
+        self.ov = ov
+        self.installments = installments
+    
+    @staticmethod
+    def add_month(original_date,months_to_add):
+        return original_date + relativedelta(months=months_to_add)
+    
+    @staticmethod
+    def calculate_days_between(date1,date2):
+        delta = date1 - date2
+        return delta.days
+
+class installment_entity:
+    def __init(self,no,tarih,gercek_gun,taksit,ap,kar,kalan_ap,guncel_deger_oran,guncellenen_taksit):
+        self.no = no
+        self.tarih = tarih
+        self.gercek_gun = gercek_gun
+        self.gun = 30
+        self.taksit = taksit
+        self.ap = ap
+        self.kar = kar
+        self.kalan_ap = kalan_ap
+        self.guncel_deger_oran = guncel_deger_oran
+        self.guncellenen_taksit = guncellenen_taksit
+        # self.guncel_deger_oran_x = guncel_deger_x
 
 if __name__ == '__main__':
     main()
